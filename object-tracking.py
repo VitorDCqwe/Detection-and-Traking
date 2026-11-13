@@ -2,6 +2,12 @@ import cv2
 import time
 import math
 
+p1 = 530
+p2 = 300
+
+xs = []
+ys = []
+
 video = cv2.VideoCapture("basquete.mp4")
 
 tracker = cv2.TrackerCSRT_create()
@@ -21,6 +27,19 @@ def draw_box(img,bounding_box):
 
     cv2.putText(img, "rastreando",(75,90), cv2.FONT_HERSHEY_SIMPLEX, 0.7,(0,255,0), 2)
 
+
+def goal_track(img,bounding_box):
+    x,y,w,h = int(bounding_box[0]),int(bounding_box[1]),int(bounding_box[2]),int(bounding_box[3])
+    c1 = x+int(w/2)
+    c2 = y+int(h/2)
+    cv2.circle(img, (c1,c2), 2, (0,0,255),5)
+    cv2.circle(img, (int(p1),int(p2)), 2, (0,255,0),3)
+    dist = math.sqrt(((c1 - p1)**2)+((c2 - p2)**2))
+    print(dist)
+
+    if dist <= 20:
+        cv2.putText(img, "Cesta!",(300,90), cv2.FONT_HERSHEY_SIMPLEX, 0.7,(0,255,0), 2)
+
 while True:
     check, img = video.read()
 
@@ -31,6 +50,8 @@ while True:
 
     else:
         cv2.putText(img, "errou",(75,90), cv2.FONT_HERSHEY_SIMPLEX, 0.7,(0,0,255), 2)
+
+    goal_track(img, bounding_box)
 
     cv2.imshow("Resulatdo ", img)
     key = cv2.waitKey(25)
