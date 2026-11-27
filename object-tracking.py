@@ -39,6 +39,10 @@ def goal_track(img,bounding_box):
 
     if dist <= 20:
         cv2.putText(img, "Cesta!",(300,90), cv2.FONT_HERSHEY_SIMPLEX, 0.7,(0,255,0), 2)
+    xs.append(c1)
+    ys.append(c2)
+    for i in range(len(xs) -1):
+        cv2.circle(img,(xs[i], ys[i]),2, (0,0,255), 5)
 
 while True:
     check, img = video.read()
